@@ -18,7 +18,7 @@ namespace API
 {
     public class Startup
     {
-        public IConfiguration _config { get; }
+        private readonly IConfiguration _config;
 
         public Startup(IConfiguration config)
         {
