@@ -25,7 +25,7 @@ namespace API.Controllers
             using var hmac = new HMACSHA512();
             var user = new AppUser
             {
-                UserName = registerDto.UserName.ToLower(),
+                UserName = registerDto.UserName,
                 PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
                 PasswordSalt = hmac.Key
             };
@@ -54,7 +54,7 @@ namespace API.Controllers
 
         private async Task<bool> UserExists(string username)
         {
-            return await _context.Users.AnyAsync(x => x.UserName == username.ToLower());
+            return await _context.Users.AnyAsync(x => x.UserName == username);
         }
 
 
