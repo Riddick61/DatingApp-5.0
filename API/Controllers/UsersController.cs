@@ -18,21 +18,21 @@ namespace API.Controllers
     [Authorize]
     public class UsersController : BaseApiController
     {
-        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UsersController(IUserRepository userRepository, IMapper mapper)
+        public UsersController(IUnitOfWork unitOfWork, IMapper mapper)
         {
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _userRepository = userRepository;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
         {
-            var users = await _userRepository.GetMembersAsync();
+            var users = await _unitOfWork.userRepository.GetMembersAsync();
             return Ok(users);
-            
+
             // var users = await _userRepository.GetsUsersAsync();
             // var usersToReturn = _mapper.Map<IEnumerable<MemberDto>>(users);
             // return Ok(usersToReturn);
@@ -41,17 +41,10 @@ namespace API.Controllers
         [HttpGet("{username}")]
         public async Task<ActionResult<MemberDto>> GetUser(string username)
         {
-            return await _userRepository.GetMemberAsync(username);
-            
+            return await _unitOfWork.userRepository.GetMemberAsync(username);
+
             //var user = await _userRepository.GetUserByUsername(username);
             //return _mapper.Map<MemberDto>(user);
         }
-
-        // [HttpGet("{id}")]
-        // public async Task<ActionResult<AppUser>> GetUserById(int id)
-        // {
-        //     return await _userRepository.GetUserByIdAsync(id);
-        // }
-
     }
 }
